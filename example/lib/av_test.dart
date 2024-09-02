@@ -35,7 +35,7 @@ class _AVPlayerTestState extends State<AVPlayerTest> {
       onPageChanged: (value) {
         print(value);
       },
-      preloadPagesCount: 3,
+      //preloadPagesCount: 3,
       physics: const AlwaysScrollableScrollPhysics(),
       controller: _pageController,
       scrollDirection: Axis.vertical,

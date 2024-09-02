@@ -51,7 +51,7 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
 
     await controller?.loadVideoSource(
         VideoSource(path: widget.url, type: VideoSourceType.network));
-
+    controller?.setVolume(1.0);
     controller?.onPlaybackEnded.addListener(() async {
       await controller?.play();
     });

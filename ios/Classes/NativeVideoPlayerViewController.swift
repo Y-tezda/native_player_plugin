@@ -67,7 +67,7 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
         removeOnVideoCompletedObserver()
         player.replaceCurrentItem(with: playerItem)
         addOnVideoCompletedObserver()
-
+        
         api.onPlaybackReady()
     }
 
@@ -81,7 +81,9 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
     }
 
     func play() {
+        player.volume = Float(1.0)
         player.play()
+        
     }
 
     func pause() {
