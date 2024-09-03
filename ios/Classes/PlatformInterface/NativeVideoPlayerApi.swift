@@ -19,7 +19,6 @@ class NativeVideoPlayerApi {
     let channel: FlutterMethodChannel
 
     init(
-        registrar:FlutterPluginRegistrar,
         messenger: FlutterBinaryMessenger,
         viewId: Int64
     ) {
@@ -27,9 +26,9 @@ class NativeVideoPlayerApi {
         let taskQueue = messenger.makeBackgroundTaskQueue?()
         channel = FlutterMethodChannel(
             name: name,
-            binaryMessenger: messenger,
-            codec: FlutterStandardMethodCodec.sharedInstance(),
-            taskQueue:taskQueue
+            binaryMessenger: messenger
+          //  codec: FlutterStandardMethodCodec.sharedInstance(),
+           // taskQueue:taskQueue
         )
         
         channel.setMethodCallHandler(handleMethodCall)
