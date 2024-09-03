@@ -19,6 +19,7 @@ class NativeVideoPlayerApi {
     let channel: FlutterMethodChannel
 
     init(
+        registrar:FlutterPluginRegistrar,
         messenger: FlutterBinaryMessenger,
         viewId: Int64
     ) {
@@ -30,7 +31,7 @@ class NativeVideoPlayerApi {
             codec: FlutterStandardMethodCodec.sharedInstance(),
             taskQueue:taskQueue
         )
-   
+        
         channel.setMethodCallHandler(handleMethodCall)
     }
 

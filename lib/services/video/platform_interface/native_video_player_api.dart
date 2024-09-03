@@ -2,12 +2,13 @@ import 'package:flutter/services.dart';
 
 import 'package:native_player_plugin/services/video/video_source.dart';
 
+
 class NativeVideoPlayerApi {
   final int viewId;
   final void Function() onPlaybackReady;
   final void Function() onPlaybackEnded;
   final void Function(String?) onError;
-  late final MethodChannel _channel;
+  late final MethodChannel _channel;  RootIsolateToken? rootIsolateToken;
 
   NativeVideoPlayerApi({
     required this.viewId,
