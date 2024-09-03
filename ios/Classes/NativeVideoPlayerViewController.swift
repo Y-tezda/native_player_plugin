@@ -62,7 +62,9 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
         }
         let videoAsset = AVAsset(url: uri)
         let playerItem = AVPlayerItem(asset: videoAsset)
-        
+        if(getVideoWidth()>getVideoHeight()){
+            playerView.playerLayer.videoGravity = .resize
+        }
 
         removeOnVideoCompletedObserver()
         player.replaceCurrentItem(with: playerItem)

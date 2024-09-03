@@ -2,7 +2,7 @@ import UIKit
 import AVFoundation
 
 class NativeVideoPlayerView: UIView {
-    private let playerLayer: AVPlayerLayer
+     let playerLayer: AVPlayerLayer
 
 
     required init?(coder: NSCoder) {
@@ -15,6 +15,7 @@ class NativeVideoPlayerView: UIView {
     ) {
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.videoGravity = .resize
+        
         super.init(frame: frame)
 
         backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
