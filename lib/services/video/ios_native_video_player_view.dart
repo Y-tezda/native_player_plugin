@@ -52,15 +52,6 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
   /// when the native view is created.
   onPlatformViewCreated(int id) async {
     _id = id;
-    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-    Isolate.spawn(_isolateMain, rootIsolateToken);
-  }
-
-  void _isolateMain(
-    RootIsolateToken rootIsolateToken,
-  ) async {
-    // Register the background isolate with the root isolate.
-    BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
     controller = NativeVideoPlayerController(_id);
 
     await controller?.loadVideoSource(
@@ -72,6 +63,17 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
 
     VisibilityDetectorController.instance.updateInterval =
         Duration(milliseconds: 400);
+
+/*    
+    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+    Isolate.spawn(_isolateMain, rootIsolateToken); */
+  }
+
+  void _isolateMain(
+    RootIsolateToken rootIsolateToken,
+  ) async {
+    // Register the background isolate with the root isolate.
+    BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
   }
 
   void _handleVisibilityDetector(VisibilityInfo info) async {
