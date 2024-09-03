@@ -1,6 +1,9 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'dart:isolate';
+
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:native_player_plugin/services/video/native_video_player_controller.dart';
 import 'package:native_player_plugin/services/video/video_source.dart';
@@ -10,7 +13,7 @@ class IosNativeVideoPlayerView extends StatefulWidget {
   //final void Function(NativeVideoPlayerController)? onViewReady;
   final String url;
 
-  const IosNativeVideoPlayerView({
+  IosNativeVideoPlayerView({
     super.key,
     required this.url,
   });
@@ -22,6 +25,7 @@ class IosNativeVideoPlayerView extends StatefulWidget {
 
 class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
   NativeVideoPlayerController? controller;
+  late int _id;
   @override
   Widget build(BuildContext context) {
     /// RepaintBoundary is a widget that isolates repaints
@@ -47,7 +51,17 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
 
   /// when the native view is created.
   onPlatformViewCreated(int id) async {
-    controller = NativeVideoPlayerController(id);
+    _id = id;
+    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+    Isolate.spawn(_isolateMain, rootIsolateToken);
+  }
+
+  void _isolateMain(
+    RootIsolateToken rootIsolateToken,
+  ) async {
+    // Register the background isolate with the root isolate.
+    BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
+    controller = NativeVideoPlayerController(_id);
 
     await controller?.loadVideoSource(
         VideoSource(path: widget.url, type: VideoSourceType.network));
