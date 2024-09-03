@@ -23,10 +23,14 @@ class NativeVideoPlayerApi {
         viewId: Int64
     ) {
         let name = "tezda.video.\(viewId)"
+        let taskQueue = messenger.makeBackgroundTaskQueue?()
         channel = FlutterMethodChannel(
             name: name,
-            binaryMessenger: messenger
+            binaryMessenger: messenger,
+            codec: FlutterStandardMethodCodec.sharedInstance(),
+            taskQueue:taskQueue
         )
+   
         channel.setMethodCallHandler(handleMethodCall)
     }
 

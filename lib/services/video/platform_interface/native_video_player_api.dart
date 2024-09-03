@@ -1,5 +1,5 @@
 import 'package:flutter/services.dart';
-import 'package:native_player_plugin/services/video/video_info.dart';
+
 import 'package:native_player_plugin/services/video/video_source.dart';
 
 class NativeVideoPlayerApi {
@@ -47,14 +47,6 @@ class NativeVideoPlayerApi {
     );
   }
 
-  Future<VideoInfo?> getVideoInfo() async {
-    final response = await _channel.invokeMethod<Map<Object?, Object?>>(
-      'getVideoInfo',
-    );
-    if (response == null) return null;
-    return VideoInfo.fromJson(Map<String, dynamic>.from(response));
-  }
-
   Future<void> play() async {
     await _channel.invokeMethod<void>(
       'play',
@@ -73,36 +65,10 @@ class NativeVideoPlayerApi {
     );
   }
 
-  Future<bool?> isPlaying() async {
-    return _channel.invokeMethod<bool?>(
-      'isPlaying',
-    );
-  }
-
-  Future<void> seekTo(int position) async {
-    await _channel.invokeMethod<void>(
-      'seekTo',
-      position,
-    );
-  }
-
-  Future<int?> getPlaybackPosition() async {
-    return _channel.invokeMethod<int?>(
-      'getPlaybackPosition',
-    );
-  }
-
   Future<void> setVolume(double volume) async {
     await _channel.invokeMethod<bool>(
       'setVolume',
       volume,
-    );
-  }
-
-  Future<void> setPlaybackSpeed(double speed) async {
-    await _channel.invokeMethod<bool>(
-      'setPlaybackSpeed',
-      speed,
     );
   }
 }

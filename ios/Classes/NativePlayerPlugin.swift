@@ -4,7 +4,6 @@ import UIKit
 public class NativePlayerPlugin: NSObject, FlutterPlugin {
   public static func register(with registrar: FlutterPluginRegistrar) {
       
-        
       let factory = NativeVideoPlayerViewFactory(messenger: registrar.messenger())
       registrar.register(factory, withId: NativeVideoPlayerViewFactory.id)
       

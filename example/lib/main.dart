@@ -6,6 +6,7 @@ import 'package:native_player_plugin/native_player_plugin.dart';
 import 'package:native_player_plugin_example/av_test.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

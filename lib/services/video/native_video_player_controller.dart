@@ -11,8 +11,6 @@ class NativeVideoPlayerController with ChangeNotifier {
   VideoSource? _videoSource;
   VideoInfo? _videoInfo;
 
-  Timer? _playbackPositionTimer;
-
   PlaybackStatus get _playbackStatus => onPlaybackStatusChanged.value;
 
   int get _playbackPosition => onPlaybackPositionChanged.value;
@@ -20,8 +18,6 @@ class NativeVideoPlayerController with ChangeNotifier {
   double get _playbackPositionFraction => videoInfo != null //
       ? _playbackPosition / videoInfo!.duration
       : 0;
-
-  double _playbackSpeed = 1;
 
   double _volume = 0;
 
@@ -65,7 +61,7 @@ class NativeVideoPlayerController with ChangeNotifier {
         status: _playbackStatus,
         position: _playbackPosition,
         positionFraction: _playbackPositionFraction,
-        speed: _playbackSpeed,
+        speed: 1.0,
         volume: _volume,
         error: _error,
       );
@@ -83,7 +79,6 @@ class NativeVideoPlayerController with ChangeNotifier {
   }
 
   Future<void> _onPlaybackReady() async {
-    _videoInfo = await _api.getVideoInfo();
     // Make sure the volume is reset to the correct value
     await setVolume(_volume);
     onPlaybackReady.notifyListeners();
@@ -102,7 +97,6 @@ class NativeVideoPlayerController with ChangeNotifier {
   @override
   @protected
   void dispose() {
-    _stopPlaybackPositionTimer();
     _api.dispose();
 
     super.dispose();
@@ -122,111 +116,27 @@ class NativeVideoPlayerController with ChangeNotifier {
   /// NOTE: This method might throw an exception if the video cannot be played.
   Future<void> play() async {
     await _api.play();
-    _startPlaybackPositionTimer();
-    onPlaybackStatusChanged.value = PlaybackStatus.playing;
-    await setPlaybackSpeed(_playbackSpeed);
   }
 
   /// Pauses the playback of the video.
   /// Use [play] to resume the playback from the paused position.
   ///
   /// NOTE: This method might throw an exception if the video cannot be paused.
-  Future<void> pause() async {
-    await _api.pause();
-    _stopPlaybackPositionTimer();
-    onPlaybackStatusChanged.value = PlaybackStatus.paused;
-  }
 
   /// Stops the playback of the video.
-  /// The playback position is reset to 0.
-  /// Use [play] to start the playback from the beginning.
-  ///
+  /// The playback position is not reset to 0.
+  /// Use [stop] then [play] to start the playback from the beginning.
+
   /// NOTE: This method might throw an exception if the video cannot be stopped.
   Future<void> stop() async {
     await _api.stop();
-    _stopPlaybackPositionTimer();
     onPlaybackStatusChanged.value = PlaybackStatus.stopped;
-    //  await _onPlaybackPositionTimerChanged(null);
   }
 
-  /// Returns true if the video is playing, or false if it's stopped or paused.
-  Future<bool> isPlaying() async {
-    try {
-      return await _api.isPlaying() ?? false;
-    } catch (exception) {
-      return false;
-    }
-  }
-
-  /// Moves the playback position to the given position in seconds.
-  ///
-  /// NOTE: This method might throw an exception if the video cannot be seeked.
-  Future<void> seekTo(int seconds) async {
-    var position = seconds;
-    if (seconds < 0) position = 0;
-    final duration = videoInfo?.duration ?? 0;
-    if (seconds > duration) position = duration;
-    await _api.seekTo(position);
-    // if the video is not playing, update onPlaybackPositionChanged
-    if (_playbackStatus != PlaybackStatus.playing) {
-      onPlaybackPositionChanged.value = position;
-    }
-  }
-
-  /// Seeks the video forward by the given number of seconds.
-  Future<void> seekForward(int seconds) async {
-    final duration = videoInfo?.duration ?? 0;
-    final newPlaybackPosition = _playbackPosition + seconds > duration //
-        ? duration
-        : _playbackPosition + seconds;
-    await seekTo(newPlaybackPosition);
-  }
-
-  /// Seeks the video backward by the given number of seconds.
-  Future<void> seekBackward(int seconds) async {
-    final newPlaybackPosition = _playbackPosition - seconds < 0 //
-        ? 0
-        : _playbackPosition - seconds;
-    await seekTo(newPlaybackPosition);
-  }
-
-  /// Sets the playback speed.
-  /// The default value is 1.
-  Future<void> setPlaybackSpeed(double speed) async {
-    if (onPlaybackStatusChanged.value == PlaybackStatus.playing) {
-      await _api.setPlaybackSpeed(speed);
-    }
-    _playbackSpeed = speed;
-    onPlaybackSpeedChanged.value = speed;
-  }
-
-  /// Sets the volume of the player.
-  ///
   /// NOTE: This method might throw an exception if the volume cannot be set.
   Future<void> setVolume(double volume) async {
     await _api.setVolume(volume);
     _volume = volume;
     onVolumeChanged.value = volume;
-  }
-
-  void _startPlaybackPositionTimer() {
-    _stopPlaybackPositionTimer();
-    _playbackPositionTimer ??= Timer.periodic(
-      const Duration(milliseconds: 100),
-      _onPlaybackPositionTimerChanged,
-    );
-  }
-
-  void _stopPlaybackPositionTimer() {
-    if (_playbackPositionTimer == null) return;
-    _playbackPositionTimer!.cancel();
-    _playbackPositionTimer = null;
-  }
-
-  /// NOTE: This method can throw an exception
-  /// if the playback position cannot be retrieved.
-  Future<void> _onPlaybackPositionTimerChanged(Timer? timer) async {
-    final position = await _api.getPlaybackPosition() ?? 0;
-    onPlaybackPositionChanged.value = position;
   }
 }

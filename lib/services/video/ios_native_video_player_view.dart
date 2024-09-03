@@ -58,23 +58,36 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
         VideoSource(path: widget.url, type: VideoSourceType.network));
     controller?.setVolume(1.0);
     controller?.onPlaybackEnded.addListener(() async {
+      controller?.stop();
       await controller?.play();
     });
 
     VisibilityDetectorController.instance.updateInterval =
-        Duration(milliseconds: 400);
+        const Duration(milliseconds: 400);
+    WidgetsFlutterBinding.ensureInitialized();
 
-/*    
-    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
-    Isolate.spawn(_isolateMain, rootIsolateToken); */
+    /*    RootIsolateToken rootIsolateToken = RootIsolateToken.instance!;
+    Isolate.spawn(
+        _isolateMain, [rootIsolateToken, controller, _id, widget.url]); */
   }
-
-  void _isolateMain(
-    RootIsolateToken rootIsolateToken,
-  ) async {
+/* 
+  static void _isolateMain(List<dynamic> args) async {
+    RootIsolateToken rootIsolateToken = args[0];
+    dynamic controller = args[1];
     // Register the background isolate with the root isolate.
     BackgroundIsolateBinaryMessenger.ensureInitialized(rootIsolateToken);
-  }
+    controller = NativeVideoPlayerController(args[2]);
+
+    await controller?.loadVideoSource(
+        VideoSource(path: args[2], type: VideoSourceType.network));
+    controller?.setVolume(1.0);
+    controller?.onPlaybackEnded.addListener(() async {
+      await controller?.play();
+    });
+
+    VisibilityDetectorController.instance.updateInterval =
+        const Duration(milliseconds: 400);
+  } */
 
   void _handleVisibilityDetector(VisibilityInfo info) async {
     if (controller != null) {
