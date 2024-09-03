@@ -36,7 +36,7 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
       key: Key(widget.url),
       onVisibilityChanged: _handleVisibilityDetector,
       child: UiKitView(
-        hitTestBehavior: PlatformViewHitTestBehavior.translucent,
+        hitTestBehavior: PlatformViewHitTestBehavior.transparent,
         viewType: viewType,
         onPlatformViewCreated: onPlatformViewCreated,
         // creationParams: creationParams,
