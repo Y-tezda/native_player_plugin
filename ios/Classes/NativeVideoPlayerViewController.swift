@@ -19,7 +19,7 @@ public class NativeVideoPlayerViewController: NSObject, FlutterPlatformView {
         
         
         playerView = NativeVideoPlayerView(frame: frame, player: player)
-       
+        
     
 
         super.init()
