@@ -65,16 +65,16 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
         let videoAsset = AVAsset(url: uri)
         
         let playerItem = AVPlayerItem(asset: videoAsset)
+        playerItem.preferredPeakBitRate = 45000000
         isThumb ? playerItem.preferredMaximumResolution = CGSize(width: 640, height: 360): nil
-        if(getVideoWidth() > getVideoHeight()){
-            playerView.playerLayer.videoGravity = .resize
-        }
-        print(isThumb)
 
         removeOnVideoCompletedObserver()
         player.replaceCurrentItem(with: playerItem)
         addOnVideoCompletedObserver()
-        
+        if(getVideoWidth() > getVideoHeight()){
+            playerView.playerLayer.videoGravity = .resize
+        }
+        print(isThumb)
         api.onPlaybackReady()
     }
 

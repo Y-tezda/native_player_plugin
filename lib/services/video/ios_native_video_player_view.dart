@@ -3,7 +3,6 @@
 import 'dart:isolate';
 
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:native_player_plugin/services/video/native_video_player_controller.dart';
 import 'package:native_player_plugin/services/video/video_source.dart';
@@ -12,9 +11,10 @@ import 'package:visibility_detector/visibility_detector.dart';
 class IosNativeVideoPlayerView extends StatefulWidget {
   //final void Function(NativeVideoPlayerController)? onViewReady;
   final String url;
-  bool? isThumbnail;
+  bool isThumbnail;
 
-  IosNativeVideoPlayerView({super.key, required this.url, this.isThumbnail});
+  IosNativeVideoPlayerView(
+      {super.key, required this.url, this.isThumbnail = false});
 
   @override
   _IosNativeVideoPlayerViewState createState() =>
@@ -51,7 +51,8 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
   onPlatformViewCreated(int id) async {
     _id = id;
     controller = NativeVideoPlayerController(_id);
-    widget.isThumbnail != null ? await controller?.setThumbnailTrue() : null;
+    widget.isThumbnail == true ? await controller?.setThumbnailTrue() : null;
+    
     await controller?.loadVideoSource(
         VideoSource(path: widget.url, type: VideoSourceType.network));
     controller?.setVolume(1.0);

@@ -40,7 +40,6 @@ class _AVPlayerTestState extends State<AVPlayerTest> {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return IosNativeVideoPlayerView(
-          isThumbnail: true,
           key: Key((index + 1).toString()),
           url: videoSources[index],
         );
