@@ -6,6 +6,7 @@ public class NativeVideoPlayerViewController: NSObject, FlutterPlatformView {
     private let api: NativeVideoPlayerApi
     private let player: AVPlayer
     private let playerView: NativeVideoPlayerView
+    private var isThumb: Bool = false
     init(
         messenger: FlutterBinaryMessenger,
         viewId: Int64,
@@ -14,6 +15,7 @@ public class NativeVideoPlayerViewController: NSObject, FlutterPlatformView {
         api = NativeVideoPlayerApi(
             messenger: messenger,
             viewId: viewId
+            
         )
         player = AVPlayer(playerItem: nil)
         
@@ -61,10 +63,13 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
             return
         }
         let videoAsset = AVAsset(url: uri)
+        
         let playerItem = AVPlayerItem(asset: videoAsset)
-        if(getVideoWidth()>getVideoHeight()){
+        isThumb ? playerItem.preferredMaximumResolution = CGSize(width: 640, height: 360): nil
+        if(getVideoWidth() > getVideoHeight()){
             playerView.playerLayer.videoGravity = .resize
         }
+        print(isThumb)
 
         removeOnVideoCompletedObserver()
         player.replaceCurrentItem(with: playerItem)
@@ -87,7 +92,9 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
         player.play()
         
     }
-
+    func setThumbnail(){
+        isThumb = true;
+    }
     func pause() {
         player.pause()
     }

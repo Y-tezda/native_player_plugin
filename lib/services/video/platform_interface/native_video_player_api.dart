@@ -53,6 +53,11 @@ class NativeVideoPlayerApi {
       'play',
     );
   }
+  Future<void> setThumbnail() async {
+    await _channel.invokeMethod<void>(
+      'setThumbnail',
+    );
+  }
 
   Future<void> pause() async {
     await _channel.invokeMethod<void>(

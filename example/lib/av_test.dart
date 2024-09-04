@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:native_player_plugin/services/video/ios_native_video_player_view.dart';
 import 'package:preload_page_view/preload_page_view.dart';
 
-
 class AVPlayerTest extends StatefulWidget {
   const AVPlayerTest({super.key});
 
@@ -41,6 +40,7 @@ class _AVPlayerTestState extends State<AVPlayerTest> {
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         return IosNativeVideoPlayerView(
+          isThumbnail: true,
           key: Key((index + 1).toString()),
           url: videoSources[index],
         );

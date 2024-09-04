@@ -12,11 +12,9 @@ import 'package:visibility_detector/visibility_detector.dart';
 class IosNativeVideoPlayerView extends StatefulWidget {
   //final void Function(NativeVideoPlayerController)? onViewReady;
   final String url;
+  bool? isThumbnail;
 
-  IosNativeVideoPlayerView({
-    super.key,
-    required this.url,
-  });
+  IosNativeVideoPlayerView({super.key, required this.url, this.isThumbnail});
 
   @override
   _IosNativeVideoPlayerViewState createState() =>
@@ -53,7 +51,7 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
   onPlatformViewCreated(int id) async {
     _id = id;
     controller = NativeVideoPlayerController(_id);
-
+    widget.isThumbnail != null ? await controller?.setThumbnailTrue() : null;
     await controller?.loadVideoSource(
         VideoSource(path: widget.url, type: VideoSourceType.network));
     controller?.setVolume(1.0);
@@ -70,8 +68,6 @@ class _IosNativeVideoPlayerViewState extends State<IosNativeVideoPlayerView> {
     Isolate.spawn(
         _isolateMain, [rootIsolateToken, controller, _id, widget.url]); */
   }
-
- 
 
   void _handleVisibilityDetector(VisibilityInfo info) async {
     if (controller != null) {

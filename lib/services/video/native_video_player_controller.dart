@@ -118,6 +118,10 @@ class NativeVideoPlayerController with ChangeNotifier {
     await _api.play();
   }
 
+  Future<void> setThumbnailTrue() async {
+    await _api.setThumbnail();
+  }
+
   /// Pauses the playback of the video.
   /// Use [play] to resume the playback from the paused position.
   ///

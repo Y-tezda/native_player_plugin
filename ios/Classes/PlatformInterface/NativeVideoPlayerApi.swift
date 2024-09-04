@@ -4,6 +4,7 @@ protocol NativeVideoPlayerApiDelegate: AnyObject {
     func getPlaybackPosition() -> Int
     func play()
     func pause()
+    func setThumbnail()
     func stop(completion: @escaping () -> Void)
     func isPlaying() -> Bool
     func seekTo(position: Int, completion: @escaping () -> Void)
@@ -21,9 +22,10 @@ class NativeVideoPlayerApi {
     init(
         messenger: FlutterBinaryMessenger,
         viewId: Int64
+    
     ) {
         let name = "tezda.video.\(viewId)"
-        let taskQueue = messenger.makeBackgroundTaskQueue?()
+//        let taskQueue = messenger.makeBackgroundTaskQueue?()
         channel = FlutterMethodChannel(
             name: name,
             binaryMessenger: messenger
@@ -71,6 +73,9 @@ class NativeVideoPlayerApi {
             result(playbackPosition)
         case "play":
             delegate?.play()
+            result(nil)
+        case "setThumbnail":
+            delegate?.setThumbnail()
             result(nil)
         case "pause":
             delegate?.pause()
