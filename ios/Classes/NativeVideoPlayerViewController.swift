@@ -65,17 +65,15 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
         let videoAsset = AVAsset(url: uri)
         
         let playerItem = AVPlayerItem(asset: videoAsset)
-        playerItem.preferredPeakBitRate = 2800000
-        playerItem.preferredMaximumResolution = isThumb ?  CGSize(width: 640, height: 360):  CGSize(width: 720, height: 1280)
-
+    
         removeOnVideoCompletedObserver()
-        player.replaceCurrentItem(with: playerItem)
-        addOnVideoCompletedObserver()
         if(getVideoWidth() > getVideoHeight()){
             playerView.playerLayer.videoGravity = .resize
         }
-        print(isThumb)
-        api.onPlaybackReady()
+
+        player.replaceCurrentItem(with: playerItem)
+        addOnVideoCompletedObserver()
+         api.onPlaybackReady()
     }
 
     func getVideoInfo() -> VideoInfo {
@@ -90,6 +88,8 @@ extension NativeVideoPlayerViewController: NativeVideoPlayerApiDelegate {
     func play() {
         player.volume = Float(1.0)
         player.play()
+        
+//print(getVideoRes())
         
     }
     func setThumbnail(){
@@ -156,7 +156,10 @@ extension NativeVideoPlayerViewController {
         }
         return 0
     }
-
+    private func getVideoRes() -> AVMediaSelection? {
+            return player.currentItem?.currentMediaSelection ?? nil
+        
+    }
     private func getVideoTrack() -> AVAssetTrack? {
         if let tracks = player.currentItem?.asset.tracks(withMediaType: .video),
            let track = tracks.first {
@@ -164,6 +167,7 @@ extension NativeVideoPlayerViewController {
         }
         return nil
     }
+    
 }
 
 extension NativeVideoPlayerViewController {
@@ -193,6 +197,7 @@ extension NativeVideoPlayerViewController {
 extension NativeVideoPlayerViewController {
     @objc
     private func onVideoCompleted(notification: NSNotification) {
+       
         api.onPlaybackEnded()
     }
 

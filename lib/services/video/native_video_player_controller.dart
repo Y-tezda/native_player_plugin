@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:native_player_plugin/services/video/platform_interface/native_video_player_api.dart';
@@ -97,6 +98,8 @@ class NativeVideoPlayerController with ChangeNotifier {
   @override
   @protected
   void dispose() {
+    log('Disposing', name: "AVPlayer - Native_player_plugin");
+
     _api.dispose();
 
     super.dispose();

@@ -12,7 +12,12 @@ class AVPlayerTest extends StatefulWidget {
 
 class _AVPlayerTestState extends State<AVPlayerTest> {
   List<String> videoSources = [
-    "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
+    "https://media.tezda.co/v/66d98d1c4053c33dcf068845/master.m3u8",
+    /*  "https://media.tezda.co/v/66d99897e480555218941a04/master.m3u8",
+    "https://media.tezda.co/v/66d992df9566de4ab08abf25/master.m3u8",
+    "https://media.tezda.co/v/66d98d1c4053c33dcf068845/master.m3u8",
+    "https://media.tezda.co/v/66d91a80519c896853c7caf5/master.m3u8", */
+    //"https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
     "https://flipfit-cdn.akamaized.net/flip_hls/661f570aab9d840019942b80-473e0b/video_h1.m3u8",
     "https://flipfit-cdn.akamaized.net/flip_hls/662aae7a42cd740019b91dec-3e114f/video_h1.m3u8",
     "https://flipfit-cdn.akamaized.net/flip_hls/663e5a1542cd740019b97dfa-ccf0e6/video_h1.m3u8",
